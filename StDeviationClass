@@ -1,0 +1,41 @@
+package com.company;
+
+import static com.company.ProjConstants.*;
+
+/**
+ * Created by 04585CUT on 23/02/2018.
+ */
+
+public class StDeviation {
+
+    private int[] Data = new int[MAXDATA];
+
+    public void addNewDataItem(int dataItem){
+
+    }//end method
+
+    public int getNumberOfDataItems(){
+
+        return INVALID;
+
+    }//end method
+
+    public double calcAverage(){
+
+        return INVALID;
+
+    }//end method
+
+    public double calcVariance(){
+
+        return INVALID;
+
+    }//end method
+
+    public double calcStandardDeviation(){
+
+        return INVALID;
+
+    }//end method
+
+}//end class
