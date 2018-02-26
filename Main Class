@@ -1,0 +1,27 @@
+package com.company;
+
+import static com.company.ProjConstants.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+
+        StDeviation calcSDev =  new StDeviation();
+
+        //loop to read file (see example)
+
+        //add data to array (see example)
+
+        //end of file or data input
+
+        //calculate standard deviation
+        //  calculate the average             (see example)
+        //  calculate the variants            (see website)
+        //  calculate the standard deviation  (Java math library)
+
+
+        //output the information              (println)
+
+    }//end method
+}//end class
