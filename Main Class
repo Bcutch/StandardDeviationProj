@@ -46,7 +46,6 @@ public class Main {
 
                     System.out.print(" - " + dataArray[itemCount]);
 
-
                     itemCount++;
                 }
                 else {
