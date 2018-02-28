@@ -1,17 +1,71 @@
 package com.company;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import static com.company.ProjConstants.*;
 
 public class Main {
-
+    private static int myMAX = 100;
     public static void main(String[] args) {
 
 
         StDeviation calcSDev =  new StDeviation();
 
-        //loop to read file (see example)
 
-        //add data to array (see example)
+        String userFileName;
+        int dataArray[] = new int[myMAX];
+        int itemCount;
+        double average;
+        double total;
+
+        System.out.println("");
+        System.out.println("Please type in the file name\n");
+
+        Scanner scanSystemIn = new Scanner(System.in);
+        userFileName = scanSystemIn.next();
+
+
+        System.out.println("\nThe user input: " + userFileName);
+
+        try {
+            itemCount = 0;
+            average = 0;
+            total = 0;
+
+            File userFile = new File(userFileName);
+            Scanner scanUserFile = new Scanner(userFile);
+
+            for(int i=0; i < myMAX; i++) {
+
+                if (scanUserFile.hasNext()) {
+
+                    dataArray[itemCount] = scanUserFile.nextInt();
+                    total = total + dataArray[itemCount];
+
+                    System.out.print(" - " + dataArray[itemCount]);
+
+
+                    itemCount++;
+                }
+                else {
+
+                    System.out.print("\n\nDataFileFILE has been completely READ\n\n");
+                    scanUserFile.close();
+
+                    break;
+                }
+            }
+
+
+        }catch (FileNotFoundException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+
+
+        //loop to read file (see example)
 
         //end of file or data input
 
