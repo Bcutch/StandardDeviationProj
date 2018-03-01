@@ -9,20 +9,35 @@ import static com.company.ProjConstants.*;
 public class StDeviation {
 
     private int[] Data = new int[MAXDATA];
+    private int itemCount = 0;
+    private int total;
 
     public void addNewDataItem(int dataItem){
+
+        Data[itemCount] = dataItem;
+        itemCount++;
 
     }//end method
 
     public int getNumberOfDataItems(){
-
         return INVALID;
 
     }//end method
 
     public double calcAverage(){
-
         return INVALID;
+        /*total=0
+        itemCount=0;
+        for(int i; i <= MAXDATA; i++) {
+
+            if() {
+                total = total + Data[itemCount]
+                itemCount++;
+            }
+            else() {
+
+            }
+        }*/
 
     }//end method
 
