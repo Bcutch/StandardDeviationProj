@@ -7,7 +7,7 @@ import java.util.Scanner;
 import static com.company.ProjConstants.*;
 
 public class Main {
-    private static int myMAX = 100;
+
     public static void main(String[] args) {
 
 
@@ -15,10 +15,10 @@ public class Main {
 
 
         String userFileName;
-        int dataArray[] = new int[myMAX];
-        int itemCount;
+        //int dataArray[] = new int[MAXDATA];
+        int someInt;
         double average;
-        double total;
+        //double total;
 
         System.out.println("");
         System.out.println("Please type in the file name\n");
@@ -30,23 +30,17 @@ public class Main {
         System.out.println("\nThe user input: " + userFileName);
 
         try {
-            itemCount = 0;
-            average = 0;
-            total = 0;
 
             File userFile = new File(userFileName);
             Scanner scanUserFile = new Scanner(userFile);
 
-            for(int i=0; i < myMAX; i++) {
+            for(int i=0; i < MAXDATA; i++) {
 
                 if (scanUserFile.hasNext()) {
 
-                    dataArray[itemCount] = scanUserFile.nextInt();
-                    total = total + dataArray[itemCount];
+                    someInt = scanUserFile.nextInt();
+                    calcSDev.addNewDataItem(someInt);
 
-                    System.out.print(" - " + dataArray[itemCount]);
-
-                    itemCount++;
                 }
                 else {
 
@@ -64,7 +58,7 @@ public class Main {
         }
 
 
-        //loop to read file (see example)
+
 
         //end of file or data input
 
