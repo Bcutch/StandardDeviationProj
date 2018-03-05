@@ -9,8 +9,26 @@ import static com.company.ProjConstants.*;
 public class StDeviation {
 
     private int[] Data = new int[MAXDATA];
+    private int[] VarData = new double[MAXDATA];
     private int itemCount = 0;
-    private int total;
+
+    private double sdAve = INVALID;
+    private double sdVar = INVALID;
+    private double sdDev = INVALID;
+
+    public void reset(){
+
+        for(int i = 0; i < MAXDATA; i++) {
+
+            Data[itemCount] = INVALID;
+        }
+        itemCount = INVALID;
+
+        sdAve = INVALID;
+        sdVar = INVALID;
+        sdDev = INVALID;
+
+    }//end method
 
     public void addNewDataItem(int dataItem){
 
@@ -20,36 +38,46 @@ public class StDeviation {
     }//end method
 
     public int getNumberOfDataItems(){
-        return INVALID;
+
+        return itemCount;
 
     }//end method
 
     public double calcAverage(){
-        return INVALID;
-        /*total=0
-        itemCount=0;
-        for(int i; i <= MAXDATA; i++) {
 
-            if() {
-                total = total + Data[itemCount]
-                itemCount++;
-            }
-            else() {
+        int total = 0;
 
-            }
-        }*/
+        for(int i = 0; i < itemCount; i++) {
+
+            total += Data[itemCount];
+        }
+
+        sdAve = total / itemCount;
+
+        return sdAve;
 
     }//end method
 
     public double calcVariance(){
 
-        return INVALID;
+        double Step1 = 0;
+        double Step2 = 0;
+
+        for(int i = 0; i < itemCount; i++) {
+
+            Step1 = Data[itemCount] - sdAve;
+            Step2 = Step1 * Step1;
+            VarData[i] = Step2;
+
+        }
+
+        return sdVar;
 
     }//end method
 
     public double calcStandardDeviation(){
 
-        return INVALID;
+        return sdDev;
 
     }//end method
 
