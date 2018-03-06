@@ -58,6 +58,39 @@ public class Main {
         }
 
 
+        double NumItems = calcSDev.getNumberOfDataItems();
+        double mean = calcSDev.calcAverage();
+        double FinVar = calcSDev.calcVariance();
+        double Sdev = calcSDev.calcStandardDeviation();
+        double lower68 = mean - Sdev;
+        double higher68 = mean + Sdev;
+        double lower95 = lower68 - Sdev;
+        double higher95 = higher68 + Sdev;
+        double lower99 = lower95 - Sdev;
+        double higher99 = higher95 + Sdev;
+
+        
+        System.out.println("# of Observations: " + NumItems);
+        System.out.println();
+
+        System.out.println("Mean: " + mean);
+        System.out.println();
+
+        System.out.println("Variance: " + FinVar);
+        System.out.println();
+
+        System.out.println("Standard Deviation: " + Sdev);
+        System.out.println();
+
+        System.out.println("68% of the Data is: " + lower68 + " < " + mean + " < " + higher68 );
+        System.out.println();
+
+        System.out.println("95% of the Data is: " + lower95 + " < " + mean + " < " + higher95 );
+        System.out.println();
+
+        System.out.println("99% of the Data is: " + lower99 + " < " + mean + " < " + higher99 );
+        System.out.println();
+
 
 
         //end of file or data input
