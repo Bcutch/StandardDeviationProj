@@ -9,7 +9,6 @@ import static com.company.ProjConstants.*;
 public class StDeviation {
 
     private int[] Data = new int[MAXDATA];
-    private int[] VarData = new double[MAXDATA];
     private int itemCount = 0;
 
     private double sdAve = INVALID;
@@ -49,7 +48,7 @@ public class StDeviation {
 
         for(int i = 0; i < itemCount; i++) {
 
-            total += Data[itemCount];
+            total += Data[i];
         }
 
         sdAve = total / itemCount;
@@ -60,22 +59,27 @@ public class StDeviation {
 
     public double calcVariance(){
 
-        double Step1 = 0;
-        double Step2 = 0;
+        double Diff = 0;
+        double Sq = 0;
+        double Total = 0;
 
         for(int i = 0; i < itemCount; i++) {
 
-            Step1 = Data[itemCount] - sdAve;
-            Step2 = Step1 * Step1;
-            VarData[i] = Step2;
+            Diff = Data[i] - sdAve;
+            Sq = Math.pow(Diff,2);
+            Total = Total + Sq;
 
         }
+
+        sdVar = Total / itemCount;
 
         return sdVar;
 
     }//end method
 
     public double calcStandardDeviation(){
+
+        sdDev = Math.sqrt(sdVar);
 
         return sdDev;
 
