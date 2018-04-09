@@ -9,30 +9,121 @@ import static com.company.ProjConstants.*;
 public class StDeviation {
 
     private int[] Data = new int[MAXDATA];
-    private int itemCount = 0;
 
-    private double sdAve = INVALID;
-    private double sdVar = INVALID;
-    private double sdDev = INVALID;
+    // Creates string for data
+
+    private int    itemCount = INVALID;
+    private int    MinRange = INVALID_RANGE;
+    private int    MaxRange = INVALID_RANGE;
+    private double Ave = INVALID;
+    private double Var = INVALID;
+    private double Dev = INVALID;
+    public int     calcMethod = INVALID;
 
     public void reset(){
 
         for(int i = 0; i < MAXDATA; i++) {
 
-            Data[itemCount] = INVALID;
+            Data[i] = INVALID;
         }
         itemCount = INVALID;
 
-        sdAve = INVALID;
-        sdVar = INVALID;
-        sdDev = INVALID;
+        Ave = INVALID;
+        Var = INVALID;
+        Dev = INVALID;
 
     }//end method
 
+    // Method to reset for another file to be entered
+
+    public void setCalcMethod(int how2calculate){
+        switch (how2calculate){
+
+            case DISCRETE: {
+
+                calcMethod = DISCRETE;
+                break;
+            }
+            case FRQTABLE: {
+
+                calcMethod = FRQTABLE;
+                break;
+            }
+            case GROUPED:
+            default: {
+
+                calcMethod = INVALID_CALC_METHOD;
+                System.out.println("ERROR: Calculation Method Either UNIMPLEMENTED, or UNKNOWN");
+                break;
+            }
+        }
+    }
+
+    public int getCalcMethod() {
+        return calcMethod;
+    }
+
+    public void setMin(int userMin) {
+        MinRange = userMin;
+    }
+
+    public int getMin(){
+        return MinRange;
+    }
+
+    public void setMax(int userMax) {
+        MaxRange = userMax;
+    }
+
+    public int getMax(){
+        return MaxRange;
+    }
+
     public void addNewDataItem(int dataItem){
 
-        Data[itemCount] = dataItem;
-        itemCount++;
+        if (itemCount == INVALID) {
+            itemCount = 0;
+        }
+
+        switch (calcMethod) {
+
+            case DISCRETE: {
+
+                Data[itemCount] = dataItem;
+                itemCount++;
+                break;
+            }
+            case FRQTABLE: {
+
+                if((getMin() != INVALID_RANGE) && (getMax() != INVALID_RANGE)) {
+
+                    if((dataItem < getMin()) || (dataItem > getMax())){
+
+                        System.out.print("ERROR: RANGE VIOLATION - Data Valu e" + dataItem + ", User Values: Minimum " + getMin() + ", Maxium " + getMax());
+
+                        break;
+                    } else if ((dataItem < MINDATA) || (dataItem > MAXDATA)) {
+
+                        System.out.print("ERROR: RANGE VIOLATION - Data Value " + dataItem + ", System Values: DATAMIN " + MINDATA + ", DATAMAX " + MAXDATA);
+
+                        break;
+                    }
+                    else {
+
+                        Data[dataItem] = Data[dataItem] + 1;
+                        itemCount++;
+                    }
+                } else {
+
+                    System.out.print("ERROR: RANGE VIOLATION - Range values not set");
+                    break;
+                }
+                break;
+            }
+            case GROUPED:
+        }
+
+        // Adds data to array
 
     }//end method
 
@@ -40,48 +131,167 @@ public class StDeviation {
 
         return itemCount;
 
+        // records number of observations
+
     }//end method
 
     public double calcAverage(){
 
-        int total = 0;
+        switch (calcMethod) {
 
-        for(int i = 0; i < itemCount; i++) {
+            case DISCRETE:{
 
-            total += Data[i];
+                if (itemCount != INVALID) {
+
+                    double total = 0;
+
+                    for(int i = 0; i <= itemCount; i++) {
+
+                        total += Data[i];
+
+                        // total = total + Data[i]
+                        // Adds all information from array together
+                    }
+
+                    Ave = total / itemCount;
+
+                    // Divides total by number of observations
+
+                }
+                else {
+
+                    Ave = INVALID;
+                }
+
+                break;
+
+            }
+            case FRQTABLE: {
+
+                double productItem;
+                double Total = 0;
+
+                if (itemCount != INVALID) {
+
+                    for( int i = 0; i < MAXDATA; i++) {
+
+                        productItem = Data[i] * i;
+                        Total += productItem;
+                    }
+
+                    Ave = Total / itemCount;
+                }
+                else {
+
+                    Ave = INVALID;
+                }
+
+            }
+            break;
+
+            case GROUPED:
         }
 
-        sdAve = total / itemCount;
 
-        return sdAve;
+        return Ave;
 
     }//end method
 
     public double calcVariance(){
 
-        double Diff = 0;
-        double Sq = 0;
-        double Total = 0;
+        switch (calcMethod) {
 
-        for(int i = 0; i < itemCount; i++) {
+            case DISCRETE: {
 
-            Diff = Data[i] - sdAve;
-            Sq = Math.pow(Diff,2);
-            Total = Total + Sq;
+                double Diff = 0;
+                double Sq = 0;
+                double Total = 0;
 
+                if (itemCount != INVALID || Ave != INVALID) {
+                    for(int i = 0; i <= itemCount; i++) {
+
+                        Diff = Data[i] - Ave;
+                        Sq = Math.pow(Diff,2);
+
+                        // Squares all observations after the
+                        // mean has been subtracted from them
+
+                        Total = Total + Sq;
+
+                        // Adds all squared observations
+
+                    }
+
+                    Var = Total / itemCount;
+
+                    // Divides by total observations
+                }
+                else {
+                    Var = INVALID;
+                }
+
+                break;
+
+            }
+            case FRQTABLE: {
+
+                double Diff;
+                double Sq;
+                double Total = 0;
+                double frSq;
+                double n = 0;
+
+                if (itemCount != INVALID || Ave != INVALID) {
+
+                    for (int i = 0; i <= itemCount; i++){
+                        Diff = i - Ave;
+                        Sq = Math.pow (Diff, 2);
+                        frSq = Sq * Data[i];
+                        Total += frSq;
+                        n += Data[i];
+                    }
+
+                    Var = Total / n;
+                }
+                else {
+
+                    Var = INVALID;
+                }
+
+                break;
+
+            }
+            case GROUPED:
         }
-
-        sdVar = Total / itemCount;
-
-        return sdVar;
+        return Var;
 
     }//end method
 
     public double calcStandardDeviation(){
 
-        sdDev = Math.sqrt(sdVar);
+        switch (calcMethod) {
 
-        return sdDev;
+            case DISCRETE: {
+
+               if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
+                   Dev = Math.sqrt(Var);
+
+                   // Square roots final variance
+               }
+
+                break;
+            }
+            case FRQTABLE: {
+
+                if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
+                    Dev = Math.sqrt(Var);
+                }
+
+                break;
+            }
+        }
+
+        return Dev;
 
     }//end method
 
