@@ -13,48 +13,124 @@ public class Main {
 
         StDeviation calcSDev =  new StDeviation();
 
+        // Creates new object
+
+        int methodType;
+
+        Scanner scanChoice = new Scanner(System.in);
+
+        System.out.println(" ");
+        System.out.println("Please choose DISCRETE, FRQTABLE or GROUPED (Type the number)");
+        System.out.println("\t1) DISCRETE");
+        System.out.println("\t2) FRQTABLE");
+        System.out.println("\t3) GROUPED\n");
+
+        methodType = scanChoice.nextInt();
+
+        switch (methodType){
+            case 1:{
+                methodType = DISCRETE;
+                break;
+            }
+            case 2:{
+                methodType = FRQTABLE;
+                break;
+            }
+            case 3:{
+                methodType = GROUPED;
+                break;
+            }
+            default:{
+                methodType = INVALID_CALC_METHOD;
+                break;
+            }
+        }
+
+        calcSDev.setCalcMethod(methodType);
+
+        if (methodType == FRQTABLE) {
+            int userMin;
+            int userMax;
+
+            Scanner scanMin = new Scanner(System.in);
+
+            System.out.println(" ");
+            System.out.println("Please type your Minimum.");
+            System.out.println("Your Min must be less than your Max\n");
+
+            userMin = scanMin.nextInt();
+
+            Scanner scanMax = new Scanner(System.in);
+
+            System.out.println(" ");
+            System.out.println("Please type your Maximum.");
+            System.out.println("Your Max must be greater than your Min\n");
+
+            userMax = scanMax.nextInt();
+
+            calcSDev.setMin(userMin);
+            calcSDev.setMax(userMax);
+        }
 
         String userFileName;
-        //int dataArray[] = new int[MAXDATA];
+
+        // Creates String named userFileName
+
         int someInt;
-        double average;
-        //double total;
 
         System.out.println("");
         System.out.println("Please type in the file name\n");
 
+        // Prompts user for file name
+
         Scanner scanSystemIn = new Scanner(System.in);
         userFileName = scanSystemIn.next();
 
+        // Creates scanner to read file
+
 
         System.out.println("\nThe user input: " + userFileName);
+
+        int i = 0;
 
         try {
 
             File userFile = new File(userFileName);
             Scanner scanUserFile = new Scanner(userFile);
+            boolean fileDone = false;
 
-            for(int i=0; i < MAXDATA; i++) {
+            while (fileDone == false) {
 
                 if (scanUserFile.hasNext()) {
 
                     someInt = scanUserFile.nextInt();
+
+                    // Scans next int in file
+
                     calcSDev.addNewDataItem(someInt);
 
-                }
-                else {
+                    // Reads file into method addNewDataItem
+                    if ((methodType == DISCRETE) && (calcSDev.getNumberOfDataItems() > MAXDATA)) {
 
-                    System.out.print("\n\nDataFileFILE has been completely READ\n\n");
-                    scanUserFile.close();
+                        System.out.print("\n\nData in file exceeds MAXDATA limit \n\n");
+                        scanUserFile.close();
+                        fileDone = true;
+                    }
 
-                    break;
+                } else{
+                        System.out.print("\n\nDataFileFILE has been completely READ\n\n");
+                        scanUserFile.close();
+                        fileDone = true;
                 }
+
+
+
             }
-
-
         }catch (FileNotFoundException e) {
             System.out.println(e);
             e.printStackTrace();
+
+            // If file is not found prompt user and stacktrace file
         }
 
 
@@ -69,39 +145,33 @@ public class Main {
         double lower99 = lower95 - Sdev;
         double higher99 = higher95 + Sdev;
 
-        
-        System.out.println("# of Observations: " + NumItems);
+        // Making variables to print into console
+
+
+        System.out.printf("# of Observations:....... %10.4f ", NumItems);
         System.out.println();
 
-        System.out.println("Mean: " + mean);
+        System.out.printf("Mean:.................... %10.4f ", mean);
         System.out.println();
 
-        System.out.println("Variance: " + FinVar);
+        System.out.printf("Variance:................ %10.4f ", FinVar);
         System.out.println();
 
-        System.out.println("Standard Deviation: " + Sdev);
+        System.out.printf("Standard Deviation:...... %10.4f\n ", Sdev);
         System.out.println();
 
-        System.out.println("68% of the Data is: " + lower68 + " < " + mean + " < " + higher68 );
+        System.out.printf("68%% of the Data is:\t %10.4f   <   x  < %10.4f", lower68,higher68 );
         System.out.println();
 
-        System.out.println("95% of the Data is: " + lower95 + " < " + mean + " < " + higher95 );
+        System.out.printf("95%% of the Data is:\t %10.4f   <   x  < %10.4f", lower95,higher95 );
         System.out.println();
 
-        System.out.println("99% of the Data is: " + lower99 + " < " + mean + " < " + higher99 );
+        System.out.printf("99%% of the Data is:\t %10.4f   <   x  < %10.4f", lower99,higher99 );
         System.out.println();
 
+        // Print all information / calculations
 
 
-        //end of file or data input
-
-        //calculate standard deviation
-        //  calculate the average             (see example)
-        //  calculate the variants            (see website)
-        //  calculate the standard deviation  (Java math library)
-
-
-        //output the information              (println)
 
     }//end method
 }//end class
