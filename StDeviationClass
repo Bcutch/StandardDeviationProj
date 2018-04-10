@@ -38,7 +38,7 @@ public class StDeviation {
 
     public void setCalcMethod(int how2calculate){
         switch (how2calculate){
-
+// Switch case statement to distinguish calculation method
             case DISCRETE: {
 
                 calcMethod = DISCRETE;
@@ -86,12 +86,13 @@ public class StDeviation {
         }
 
         switch (calcMethod) {
-
+// Switch case statement to separate different calculation methods
             case DISCRETE: {
 
                 Data[itemCount] = dataItem;
                 itemCount++;
                 break;
+                // adds data to array, itemcount also counts data items going into array
             }
             case FRQTABLE: {
 
@@ -108,10 +109,12 @@ public class StDeviation {
 
                         break;
                     }
+                    // System checking to make sure data falls within parameters
                     else {
 
                         Data[dataItem] = Data[dataItem] + 1;
                         itemCount++;
+                        // adds data to array, itemcount also counts data items going into array
                     }
                 } else {
 
@@ -131,14 +134,14 @@ public class StDeviation {
 
         return itemCount;
 
-        // records number of observations
+        // returns number of observations
 
     }//end method
 
     public double calcAverage(){
 
         switch (calcMethod) {
-
+// Switch case statement to separate different calculation methods
             case DISCRETE:{
 
                 if (itemCount != INVALID) {
@@ -158,10 +161,12 @@ public class StDeviation {
                     // Divides total by number of observations
 
                 }
+                //calculates average
                 else {
 
                     Ave = INVALID;
                 }
+                //if no data was added to array average is invalid
 
                 break;
 
@@ -181,10 +186,14 @@ public class StDeviation {
 
                     Ave = Total / itemCount;
                 }
+                //calculates average
                 else {
 
                     Ave = INVALID;
                 }
+                //if no data was added to array average is invalid
+
+
 
             }
             break;
@@ -200,7 +209,7 @@ public class StDeviation {
     public double calcVariance(){
 
         switch (calcMethod) {
-
+// Switch case statement to separate different calculation methods
             case DISCRETE: {
 
                 double Diff = 0;
@@ -226,9 +235,11 @@ public class StDeviation {
 
                     // Divides by total observations
                 }
+                //calculates variance
                 else {
                     Var = INVALID;
                 }
+                //if no average was calculated variance is invalid
 
                 break;
 
@@ -253,10 +264,12 @@ public class StDeviation {
 
                     Var = Total / n;
                 }
+                // calculates variance
                 else {
 
                     Var = INVALID;
                 }
+                //if no average was calculated variance is invalid
 
                 break;
 
@@ -270,14 +283,14 @@ public class StDeviation {
     public double calcStandardDeviation(){
 
         switch (calcMethod) {
-
+// Switch case statement to separate different calculation methods
             case DISCRETE: {
 
-               if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
-                   Dev = Math.sqrt(Var);
+                if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
+                    Dev = Math.sqrt(Var);
 
-                   // Square roots final variance
-               }
+                    // Square roots final variance
+                }
 
                 break;
             }
@@ -285,6 +298,8 @@ public class StDeviation {
 
                 if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
                     Dev = Math.sqrt(Var);
+
+                    // Square roots final variance
                 }
 
                 break;
