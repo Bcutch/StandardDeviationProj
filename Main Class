@@ -1,313 +1,177 @@
 package com.company;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import static com.company.ProjConstants.*;
 
-/**
- * Created by 04585CUT on 23/02/2018.
- */
+public class Main {
 
-public class StDeviation {
+    public static void main(String[] args) {
 
-    private int[] Data = new int[MAXDATA];
 
-    // Creates string for data
+        StDeviation calcSDev =  new StDeviation();
 
-    private int    itemCount = INVALID;
-    private int    MinRange = INVALID_RANGE;
-    private int    MaxRange = INVALID_RANGE;
-    private double Ave = INVALID;
-    private double Var = INVALID;
-    private double Dev = INVALID;
-    public int     calcMethod = INVALID;
+        // Creates new object
 
-    public void reset(){
+        int methodType;
 
-        for(int i = 0; i < MAXDATA; i++) {
+        Scanner scanChoice = new Scanner(System.in);
 
-            Data[i] = INVALID;
-        }
-        itemCount = INVALID;
+        System.out.println(" ");
+        System.out.println("Please choose DISCRETE, FRQTABLE or GROUPED (Type the number)");
+        System.out.println("\t1) DISCRETE");
+        System.out.println("\t2) FRQTABLE");
+        System.out.println("\t3) GROUPED\n");
 
-        Ave = INVALID;
-        Var = INVALID;
-        Dev = INVALID;
+        methodType = scanChoice.nextInt();
 
-    }//end method
-
-    // Method to reset for another file to be entered
-
-    public void setCalcMethod(int how2calculate){
-        switch (how2calculate){
-
-            case DISCRETE: {
-
-                calcMethod = DISCRETE;
+        switch (methodType){
+            case 1:{
+                methodType = DISCRETE;
                 break;
             }
-            case FRQTABLE: {
-
-                calcMethod = FRQTABLE;
+            case 2:{
+                methodType = FRQTABLE;
                 break;
             }
-            case GROUPED:
-            default: {
-
-                calcMethod = INVALID_CALC_METHOD;
-                System.out.println("ERROR: Calculation Method Either UNIMPLEMENTED, or UNKNOWN");
+            case 3:{
+                methodType = GROUPED;
+                break;
+            }
+            default:{
+                methodType = INVALID_CALC_METHOD;
                 break;
             }
         }
-    }
 
-    public int getCalcMethod() {
-        return calcMethod;
-    }
+        calcSDev.setCalcMethod(methodType);
 
-    public void setMin(int userMin) {
-        MinRange = userMin;
-    }
+        if (methodType == FRQTABLE) {
+            int userMin;
+            int userMax;
 
-    public int getMin(){
-        return MinRange;
-    }
+            Scanner scanMin = new Scanner(System.in);
 
-    public void setMax(int userMax) {
-        MaxRange = userMax;
-    }
+            System.out.println(" ");
+            System.out.println("Please type your Minimum.");
+            System.out.println("Your Min must be less than your Max\n");
 
-    public int getMax(){
-        return MaxRange;
-    }
+            userMin = scanMin.nextInt();
 
-    public void addNewDataItem(int dataItem){
+            Scanner scanMax = new Scanner(System.in);
 
-        if (itemCount == INVALID) {
-            itemCount = 0;
+            System.out.println(" ");
+            System.out.println("Please type your Maximum.");
+            System.out.println("Your Max must be greater than your Min\n");
+
+            userMax = scanMax.nextInt();
+
+            calcSDev.setMin(userMin);
+            calcSDev.setMax(userMax);
         }
 
-        switch (calcMethod) {
-// Switch case statement to separate different calculation methods
-            case DISCRETE: {
+        String userFileName;
 
-                Data[itemCount] = dataItem;
-                itemCount++;
-                break;
-                // adds data to array, itemcount also counts data items going into array
-            }
-            case FRQTABLE: {
+        // Creates String named userFileName
 
-                if((getMin() != INVALID_RANGE) && (getMax() != INVALID_RANGE)) {
+        int someInt;
 
-                    if((dataItem < getMin()) || (dataItem > getMax())){
+        System.out.println("");
+        System.out.println("Please type in the file name\n");
 
-                        System.out.print("ERROR: RANGE VIOLATION - Data Valu e" + dataItem + ", User Values: Minimum " + getMin() + ", Maxium " + getMax());
+        // Prompts user for file name
 
-                        break;
-                    } else if ((dataItem < MINDATA) || (dataItem > MAXDATA)) {
+        Scanner scanSystemIn = new Scanner(System.in);
+        userFileName = scanSystemIn.next();
 
-                        System.out.print("ERROR: RANGE VIOLATION - Data Value " + dataItem + ", System Values: DATAMIN " + MINDATA + ", DATAMAX " + MAXDATA);
+        // Creates scanner to read file
 
-                        break;
-                    }
-                    // System checking to make sure data falls within parameters
-                    else {
 
-                        Data[dataItem] = Data[dataItem] + 1;
-                        itemCount++;
-                        // adds data to array, itemcount also counts data items going into array
-                    }
-                } else {
+        System.out.println("\nThe user input: " + userFileName);
 
-                    System.out.print("ERROR: RANGE VIOLATION - Range values not set");
-                    break;
-                }
-                break;
-            }
-            case GROUPED:
-        }
+        int i = 0;
 
-        // Adds data to array
+        try {
 
-    }//end method
+            File userFile = new File(userFileName);
+            Scanner scanUserFile = new Scanner(userFile);
+            boolean fileDone = false;
 
-    public int getNumberOfDataItems(){
+            while (fileDone == false) {
 
-        return itemCount;
+                if (scanUserFile.hasNext()) {
 
-        // returns number of observations
+                    someInt = scanUserFile.nextInt();
 
-    }//end method
+                    // Scans next int in file
 
-    public double calcAverage(){
+                    calcSDev.addNewDataItem(someInt);
 
-        switch (calcMethod) {
-// Switch case statement to separate different calculation methods
-            case DISCRETE:{
+                    // Reads file into method addNewDataItem
+                    if ((methodType == DISCRETE) && (calcSDev.getNumberOfDataItems() > MAXDATA)) {
 
-                if (itemCount != INVALID) {
-
-                    double total = 0;
-
-                    for(int i = 0; i <= itemCount; i++) {
-
-                        total += Data[i];
-
-                        // total = total + Data[i]
-                        // Adds all information from array together
+                        System.out.print("\n\nData in file exceeds MAXDATA limit \n\n");
+                        scanUserFile.close();
+                        fileDone = true;
                     }
 
-                    Ave = total / itemCount;
-
-                    // Divides total by number of observations
-
+                } else{
+                    System.out.print("\n\nDataFileFILE has been completely READ\n\n");
+                    scanUserFile.close();
+                    fileDone = true;
                 }
-                //calculates average
-                else {
-
-                    Ave = INVALID;
-                }
-                //if no data was added to array average is invalid
-
-                break;
-
-            }
-            case FRQTABLE: {
-
-                double productItem;
-                double Total = 0;
-
-                if (itemCount != INVALID) {
-
-                    for( int i = 0; i < MAXDATA; i++) {
-
-                        productItem = Data[i] * i;
-                        Total += productItem;
-                    }
-
-                    Ave = Total / itemCount;
-                }
-                //calculates average
-                else {
-
-                    Ave = INVALID;
-                }
-                //if no data was added to array average is invalid
 
 
 
             }
-            break;
+        }catch (FileNotFoundException e) {
+            System.out.println(e);
+            e.printStackTrace();
 
-            case GROUPED:
+            // If file is not found prompt user and stacktrace file
         }
 
 
-        return Ave;
+        double NumItems = calcSDev.getNumberOfDataItems();
+        double mean = calcSDev.calcAverage();
+        double FinVar = calcSDev.calcVariance();
+        double Sdev = calcSDev.calcStandardDeviation();
+        double lower68 = mean - Sdev;
+        double higher68 = mean + Sdev;
+        double lower95 = lower68 - Sdev;
+        double higher95 = higher68 + Sdev;
+        double lower99 = lower95 - Sdev;
+        double higher99 = higher95 + Sdev;
+
+        // Making variables to print into console
+
+
+        System.out.printf("# of Observations:....... %10.4f ", NumItems);
+        System.out.println();
+
+        System.out.printf("Mean:.................... %10.4f ", mean);
+        System.out.println();
+
+        System.out.printf("Variance:................ %10.4f ", FinVar);
+        System.out.println();
+
+        System.out.printf("Standard Deviation:...... %10.4f\n ", Sdev);
+        System.out.println();
+
+        System.out.printf("68%% of the Data is:\t %10.4f   <   x  < %10.4f", lower68,higher68 );
+        System.out.println();
+
+        System.out.printf("95%% of the Data is:\t %10.4f   <   x  < %10.4f", lower95,higher95 );
+        System.out.println();
+
+        System.out.printf("99%% of the Data is:\t %10.4f   <   x  < %10.4f", lower99,higher99 );
+        System.out.println();
+
+        // Print all information / calculations
+
+
 
     }//end method
-
-    public double calcVariance(){
-
-        switch (calcMethod) {
-// Switch case statement to separate different calculation methods
-            case DISCRETE: {
-
-                double Diff = 0;
-                double Sq = 0;
-                double Total = 0;
-
-                if (itemCount != INVALID || Ave != INVALID) {
-                    for(int i = 0; i <= itemCount; i++) {
-
-                        Diff = Data[i] - Ave;
-                        Sq = Math.pow(Diff,2);
-
-                        // Squares all observations after the
-                        // mean has been subtracted from them
-
-                        Total = Total + Sq;
-
-                        // Adds all squared observations
-
-                    }
-
-                    Var = Total / itemCount;
-
-                    // Divides by total observations
-                }
-                //calculates variance
-                else {
-                    Var = INVALID;
-                }
-                //if no average was calculated variance is invalid
-
-                break;
-
-            }
-            case FRQTABLE: {
-
-                double Diff;
-                double Sq;
-                double Total = 0;
-                double frSq;
-                double n = 0;
-
-                if (itemCount != INVALID || Ave != INVALID) {
-
-                    for (int i = 0; i <= itemCount; i++){
-                        Diff = i - Ave;
-                        Sq = Math.pow (Diff, 2);
-                        frSq = Sq * Data[i];
-                        Total += frSq;
-                        n += Data[i];
-                    }
-
-                    Var = Total / n;
-                }
-                // calculates variance
-                else {
-
-                    Var = INVALID;
-                }
-                //if no average was calculated variance is invalid
-
-                break;
-
-            }
-            case GROUPED:
-        }
-        return Var;
-
-    }//end method
-
-    public double calcStandardDeviation(){
-
-        switch (calcMethod) {
-// Switch case statement to separate different calculation methods
-            case DISCRETE: {
-
-                if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
-                    Dev = Math.sqrt(Var);
-
-                    // Square roots final variance
-                }
-
-                break;
-            }
-            case FRQTABLE: {
-
-                if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
-                    Dev = Math.sqrt(Var);
-
-                    // Square roots final variance
-                }
-
-                break;
-            }
-        }
-
-        return Dev;
-
-    }//end method
-
 }//end class
