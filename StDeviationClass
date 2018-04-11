@@ -57,27 +57,27 @@ public class StDeviation {
                 break;
             }
         }
-    }
+    }//end method
 
     public int getCalcMethod() {
         return calcMethod;
-    }
+    }//end method
 
     public void setMin(int userMin) {
         MinRange = userMin;
-    }
+    }//end method
 
     public int getMin(){
         return MinRange;
-    }
+    }//end method
 
     public void setMax(int userMax) {
         MaxRange = userMax;
-    }
+    }//end method
 
     public int getMax(){
         return MaxRange;
-    }
+    }//end method
 
     public void addNewDataItem(int dataItem){
 
@@ -89,8 +89,14 @@ public class StDeviation {
 // Switch case statement to separate different calculation methods
             case DISCRETE: {
 
-                Data[itemCount] = dataItem;
-                itemCount++;
+                if (itemCount >= MAXDATA){
+                    System.out.println("WARNING: Data Storage, data value < " + dataItem + " > discarded " );
+                }
+                else {
+                    Data[itemCount] = dataItem;
+                    itemCount++;
+
+                }
                 break;
                 // adds data to array, itemcount also counts data items going into array
             }
@@ -114,7 +120,7 @@ public class StDeviation {
 
                         Data[dataItem] = Data[dataItem] + 1;
                         itemCount++;
-                        // adds data to array, itemcount also counts data items going into array
+                        // adds data to array, itemCount also counts data items going into array
                     }
                 } else {
 
@@ -148,7 +154,7 @@ public class StDeviation {
 
                     double total = 0;
 
-                    for(int i = 0; i <= itemCount; i++) {
+                    for(int i = 0; i < itemCount; i++) {
 
                         total += Data[i];
 
@@ -178,9 +184,9 @@ public class StDeviation {
 
                 if (itemCount != INVALID) {
 
-                    for( int i = 0; i < MAXDATA; i++) {
+                    for( int i = 0; i < itemCount; i++) {
 
-                        productItem = Data[i] * i;
+                        productItem = Data[i] * (double) i;
                         Total += productItem;
                     }
 
@@ -217,7 +223,7 @@ public class StDeviation {
                 double Total = 0;
 
                 if (itemCount != INVALID || Ave != INVALID) {
-                    for(int i = 0; i <= itemCount; i++) {
+                    for(int i = 0; i < itemCount; i++) {
 
                         Diff = Data[i] - Ave;
                         Sq = Math.pow(Diff,2);
@@ -254,8 +260,8 @@ public class StDeviation {
 
                 if (itemCount != INVALID || Ave != INVALID) {
 
-                    for (int i = 0; i <= itemCount; i++){
-                        Diff = i - Ave;
+                    for (int i = 0; i < itemCount; i++){
+                        Diff = (double) i - Ave;
                         Sq = Math.pow (Diff, 2);
                         frSq = Sq * Data[i];
                         Total += frSq;
@@ -289,7 +295,7 @@ public class StDeviation {
                 if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
                     Dev = Math.sqrt(Var);
 
-                    // Square roots final variance
+                    // Square roots final variance to find Deviation
                 }
 
                 break;
@@ -299,7 +305,7 @@ public class StDeviation {
                 if (itemCount != INVALID || Ave != INVALID || Var != INVALID) {
                     Dev = Math.sqrt(Var);
 
-                    // Square roots final variance
+                    // Square roots final variance to find Deviation
                 }
 
                 break;
