@@ -15,6 +15,7 @@ public class StDeviation {
     private int    itemCount = INVALID;
     private int    MinRange = INVALID_RANGE;
     private int    MaxRange = INVALID_RANGE;
+    private int    numberOfGroups = INVALID;
     private double Ave = INVALID;
     private double Var = INVALID;
     private double Dev = INVALID;
@@ -64,7 +65,12 @@ public class StDeviation {
     }//end method
 
     public void setMin(int userMin) {
-        MinRange = userMin;
+        if ((userMin >= MINDATA) && (userMin < MAXDATA)){
+            MinRange = userMin;
+        }
+        else{
+            MinRange = INVALID_RANGE;
+        }
     }//end method
 
     public int getMin(){
@@ -72,14 +78,27 @@ public class StDeviation {
     }//end method
 
     public void setMax(int userMax) {
-        MaxRange = userMax;
+        if ((userMax >= MINDATA) && (userMax < MAXDATA)){
+            MaxRange = userMax;
+        }
+        else{
+            MaxRange = INVALID_RANGE;
+        }
     }//end method
 
-    public int getMax(){
+    public int getMax() {
         return MaxRange;
     }//end method
 
-    public void addNewDataItem(int dataItem){
+    public void setNumberOfGroups(int groups) {
+        numberOfGroups = groups;
+    }
+
+    public int getNumberOfGroups() {
+        return numberOfGroups;
+    }
+
+    public void addNewDataItem(int dataItem) {
 
         if (itemCount == INVALID) {
             itemCount = 0;
@@ -106,12 +125,12 @@ public class StDeviation {
 
                     if((dataItem < getMin()) || (dataItem > getMax())){
 
-                        System.out.print("ERROR: RANGE VIOLATION - Data Valu e" + dataItem + ", User Values: Minimum " + getMin() + ", Maxium " + getMax());
+                        System.out.print("ERROR: RANGE VIOLATION - Data Value: " + dataItem + ", User Values: Minimum: " + getMin() + ", Maximum: " + getMax());
 
                         break;
                     } else if ((dataItem < MINDATA) || (dataItem > MAXDATA)) {
 
-                        System.out.print("ERROR: RANGE VIOLATION - Data Value " + dataItem + ", System Values: DATAMIN " + MINDATA + ", DATAMAX " + MAXDATA);
+                        System.out.print("ERROR: RANGE VIOLATION - Data Value: " + dataItem + ", System Values: DATAMIN: " + MINDATA + ", DATAMAX: " + MAXDATA);
 
                         break;
                     }
@@ -129,7 +148,9 @@ public class StDeviation {
                 }
                 break;
             }
-            case GROUPED:
+            case GROUPED: {
+
+            }
         }
 
         // Adds data to array
@@ -184,7 +205,7 @@ public class StDeviation {
 
                 if (itemCount != INVALID) {
 
-                    for( int i = 0; i < itemCount; i++) {
+                    for( int i = getMin(); i < getMax(); i++) {
 
                         productItem = Data[i] * (double) i;
                         Total += productItem;
@@ -200,9 +221,9 @@ public class StDeviation {
                 //if no data was added to array average is invalid
 
 
-
+                break;
             }
-            break;
+
 
             case GROUPED:
         }
@@ -260,7 +281,7 @@ public class StDeviation {
 
                 if (itemCount != INVALID || Ave != INVALID) {
 
-                    for (int i = 0; i < itemCount; i++){
+                    for (int i = getMin(); i < getMax(); i++){
                         Diff = (double) i - Ave;
                         Sq = Math.pow (Diff, 2);
                         frSq = Sq * Data[i];
@@ -317,3 +338,4 @@ public class StDeviation {
     }//end method
 
 }//end class
+
