@@ -15,7 +15,7 @@ public class StDeviation {
     private int    itemCount = INVALID;
     private int    MinRange = INVALID_RANGE;
     private int    MaxRange = INVALID_RANGE;
-    private int    numberOfGroups = INVALID;
+    private int    NumOfGroups = INVALID;
     private double Ave = INVALID;
     private double Var = INVALID;
     private double Dev = INVALID;
@@ -50,7 +50,10 @@ public class StDeviation {
                 calcMethod = FRQTABLE;
                 break;
             }
-            case GROUPED:
+            case GROUPED: {
+
+                break;
+            }
             default: {
 
                 calcMethod = INVALID_CALC_METHOD;
@@ -90,12 +93,18 @@ public class StDeviation {
         return MaxRange;
     }//end method
 
-    public void setNumberOfGroups(int groups) {
-        numberOfGroups = groups;
+    public void setNumberOfGroups(int groups){
+
+        if ((groups > MINDATA) && (groups <= (MaxRange  - MinRange)) && ((MaxRange - MinRange) % groups == 1)){
+            NumOfGroups = groups;
+        }
+        else {
+            NumOfGroups = INVALID;
+        }
     }
 
-    public int getNumberOfGroups() {
-        return numberOfGroups;
+    public int getNumberOfGroups(){
+        return NumOfGroups;
     }
 
     public void addNewDataItem(int dataItem) {
