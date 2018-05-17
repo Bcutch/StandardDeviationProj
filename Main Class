@@ -1,4 +1,81 @@
+package com.company;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+import static com.company.ProjConstants.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+
+        StDeviation calcSDev =  new StDeviation();
+
+        // Creates new object
+
+        int methodType;
+
+        Scanner scanChoice = new Scanner(System.in);
+
+        System.out.println(" ");
+        System.out.println("Please choose DISCRETE, FRQTABLE or GROUPED (Type the number)");
+        System.out.println("\t1) DISCRETE");
+        System.out.println("\t2) FRQTABLE");
+        System.out.println("\t3) GROUPED\n");
+
+        methodType = scanChoice.nextInt();
+
+        switch (methodType){
+            case 1:{
+                methodType = DISCRETE;
+                break;
+            }
+            case 2:{
+                methodType = FRQTABLE;
+                break;
+            }
+            case 3:{
+                methodType = GROUPED;
+                break;
+            }
+            default:{
+                methodType = INVALID_CALC_METHOD;
+                break;
+            }
+        }
+
+        calcSDev.setCalcMethod(methodType);
+
+        if (methodType == FRQTABLE || methodType == GROUPED) {
+            int userMin;
+            int userMax;
+
+            Scanner scanMin = new Scanner(System.in);
+
+            System.out.println(" ");
+            System.out.println("Please type your Minimum.");
+            System.out.println("Your Min must be less than your Max\n");
+
+            userMin = scanMin.nextInt();
+
+            Scanner scanMax = new Scanner(System.in);
+
+            System.out.println(" ");
+            System.out.println("Please type your Maximum.");
+            System.out.println("Your Max must be greater than your Min");
+            System.out.println("Your Max must not be greater than 2000\n");
+
+            userMax = scanMax.nextInt();
+
+            calcSDev.setMin(userMin);
+            calcSDev.setMax(userMax);
+        }
+
+        if (methodType == GROUPED) {
+            int userGroups = INVALID;
+            boolean goodGroups = false;
 
             while (!goodGroups) {
                 Scanner scanGroups = new Scanner(System.in);
@@ -8,13 +85,24 @@
 
                 if (scanGroups.hasNextInt()){
                     userGroups = scanGroups.nextInt();
-                }
-                else if (scanGroups.next() == "EXIT"){
-                    System.exit(0);
+                    calcSDev.setNumberOfGroups(userGroups);
                 }
                 else {
-                    System.out.println("ERROR: Please type only integer values.");
+                    String response = scanGroups.next();
+                    String EXIT = "EXIT";
+
+                    if (response.toUpperCase() == EXIT){
+                        System.exit(0);
+                    }
+                    else {
+                        System.out.println("ERROR: Please type only integer values, or EXIT");
+                    }
+
                 }
+
+                //else {
+                //    System.out.println("ERROR: Please type only integer values.");
+                //}
                 calcSDev.setNumberOfGroups(userGroups);
 
                 if (calcSDev.getNumberOfGroups() != INVALID) {
@@ -22,6 +110,7 @@
                 }
                 else {
                     goodGroups = false;
+                    System.out.println();
                     System.out.println("ERROR: Invalid Groups. Note- Your Minimum is included.");
                     System.out.println("If your Minimum or Maximum is incorrect, please exit by typing EXIT and try again.");
                 }
@@ -132,4 +221,3 @@
 
     }//end method
 }//end class
-
