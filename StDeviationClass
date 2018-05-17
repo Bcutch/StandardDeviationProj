@@ -9,17 +9,20 @@ import static com.company.ProjConstants.*;
 public class StDeviation {
 
     private int[] Data = new int[MAXDATA];
+    private int[] Grouped = new int[MAXDATA];
 
     // Creates string for data
 
-    private int    itemCount = INVALID;
-    private int    MinRange = INVALID_RANGE;
-    private int    MaxRange = INVALID_RANGE;
-    private int    NumOfGroups = INVALID;
-    private double Ave = INVALID;
-    private double Var = INVALID;
-    private double Dev = INVALID;
-    public int     calcMethod = INVALID;
+    private int    itemCount        = INVALID;
+    private int    MinRange         = INVALID_RANGE;
+    private int    MaxRange         = INVALID_RANGE;
+    private int    NumOfGroups      = INVALID;
+    private double Ave              = INVALID;
+    private double Var              = INVALID;
+    private double Dev              = INVALID;
+    public int     calcMethod       = INVALID;
+    private int    NumVal           = getMax() - getMin();
+    private int    groupedInterval  = (NumVal + 1) / getNumberOfGroups();
 
     public void reset(){
 
@@ -95,7 +98,7 @@ public class StDeviation {
 
     public void setNumberOfGroups(int groups){
 
-        if ((groups > MINDATA) && (groups <= (MaxRange  - MinRange)) && ((MaxRange - MinRange) % groups == 1)){
+        if ((groups > MINDATA) && (groups <= (MaxRange  - MinRange)) && (((MaxRange - MinRange) + 1) % groups == 0)){
             NumOfGroups = groups;
         }
         else {
@@ -159,6 +162,33 @@ public class StDeviation {
             }
             case GROUPED: {
 
+                if((getMin() != INVALID_RANGE) && (getMax() != INVALID_RANGE)) {
+
+                    if((dataItem < getMin()) || (dataItem > getMax())){
+
+                        System.out.print("ERROR: RANGE VIOLATION - Data Value: " + dataItem + ", User Values: Minimum: " + getMin() + ", Maximum: " + getMax());
+
+                        break;
+                    } else if ((dataItem < MINDATA) || (dataItem > MAXDATA)) {
+
+                        System.out.print("ERROR: RANGE VIOLATION - Data Value: " + dataItem + ", System Values: DATAMIN: " + MINDATA + ", DATAMAX: " + MAXDATA);
+
+                        break;
+                    }
+                    // System checking to make sure data falls within parameters
+                    else {
+
+                        Data[dataItem] = Data[dataItem] + 1;
+                        itemCount++;
+                        // adds data to array, itemCount also counts data items going into array
+                    }
+                } else {
+
+                    System.out.print("ERROR: RANGE VIOLATION - Range values not set");
+                    break;
+                }
+                break;
+
             }
         }
 
@@ -177,7 +207,7 @@ public class StDeviation {
     public double calcAverage(){
 
         switch (calcMethod) {
-// Switch case statement to separate different calculation methods
+        // Switch case statement to separate different calculation methods
             case DISCRETE:{
 
                 if (itemCount != INVALID) {
@@ -234,7 +264,36 @@ public class StDeviation {
             }
 
 
-            case GROUPED:
+            case GROUPED: {
+
+                double productItem;
+                double Total = 0;
+
+               
+                for (int i = 0; i < NumVal; i += groupedInterval) {
+                    for (int j = i; j < groupedInterval; j++) {
+                       productItem = Data[j] /* times the midpoint*/;
+                    }
+                    Total += productItem;
+                }
+                
+                if (itemCount != INVALID) {
+
+                    for( int i = getMin(); i < getMax(); i++) {
+
+                        productItem = Grouped[i] * ;
+                        Total += productItem;
+                    }
+
+                    Ave = Total / itemCount;
+                }
+                //calculates average
+                else {
+
+                    Ave = INVALID;
+                }
+                //if no data was added to array average is invalid
+            }
         }
 
 
@@ -347,4 +406,3 @@ public class StDeviation {
     }//end method
 
 }//end class
-
