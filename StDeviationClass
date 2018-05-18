@@ -21,8 +21,6 @@ public class StDeviation {
     private double Var              = INVALID;
     private double Dev              = INVALID;
     public int     calcMethod       = INVALID;
-    private int    NumVal           = getMax() - getMin();
-    private int    groupedInterval  = (NumVal + 1) / getNumberOfGroups();
 
     public void reset(){
 
@@ -55,6 +53,7 @@ public class StDeviation {
             }
             case GROUPED: {
 
+                calcMethod = GROUPED;
                 break;
             }
             default: {
@@ -265,16 +264,22 @@ public class StDeviation {
 
 
             case GROUPED: {
+                int NumVal = (getMax() - getMin()) + 1;
+                int groupedInterval = (NumVal) / getNumberOfGroups();
 
                 double productItem = 0;
                 double Total = 0;
+                double groupTotal = 0;
+                double mid = 0;
 
                 if (itemCount != INVALID) {
 
-                    for (int i = 0; i < NumVal; i += groupedInterval) {
-                        for (int j = i; j < groupedInterval; j++) {
-                            productItem = Data[j] * ((j + groupedInterval) / 2);
+                    for (int i = getMin(); i < (NumVal + getMin()); i += groupedInterval) {
+                        for (int j = i; j < (groupedInterval + i); j++) {
+                            groupTotal += Data[j];
+                            mid = j;
                         }
+                        productItem = groupTotal * ((mid + groupedInterval) / 2);
                         Total += productItem;
                     }
 
@@ -363,6 +368,8 @@ public class StDeviation {
 
             }
             case GROUPED: {
+                int NumVal = getMax() - getMin();
+                int groupedInterval = (NumVal + 1) / getNumberOfGroups();
 
                 double Diff;
                 double Sq;
@@ -372,8 +379,8 @@ public class StDeviation {
 
                 if (itemCount != INVALID || Ave != INVALID) {
 
-                    for (int i = 0; i < NumVal; i += groupedInterval){
-                        for (int j = i; j < groupedInterval; j++) {
+                    for (int i = getMin(); i < (NumVal + getMin()); i += groupedInterval){
+                        for (int j = i; j < (groupedInterval + i); j++) {
                             Diff = (double) ((j + groupedInterval) / 2) - Ave;
                             Sq = Math.pow (Diff, 2);
                             frSq = Sq * Data[j];
